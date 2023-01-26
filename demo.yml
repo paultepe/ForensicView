@@ -1,0 +1,19 @@
+version: "3"
+
+services:
+  django:
+    build:
+      context: .
+      dockerfile: ./compose/dockerfile
+    image: forensik_projekt_local_django
+    container_name: forensik_projekt_local_django
+    volumes:
+      - .:/app:z
+    ports:
+      - "8000:8000"
+    command: >
+      /bin/bash -c "python manage.py makemigrations  --noinput
+      && python manage.py migrate  --noinput
+      && python manage.py runserver 0.0.0.0:8000"
+
+

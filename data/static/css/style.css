@@ -1,0 +1,9 @@
+ #custom_body {
+        background-color: #34568B;
+    }
+
+#rcorners1 {
+    border-radius: 4%;
+    background: #ffffff;
+    padding: 20px;
+}

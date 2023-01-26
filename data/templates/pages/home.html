@@ -1,0 +1,16 @@
+<!-- templates/home.html-->
+{% extends 'pages/base_site.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+  Hallo {{ user.username }}!
+    {% for object in objects %}
+        {{ object.name }}
+    {% endfor %}
+{% else %}
+  <p>Sie sind nicht angemeldet</p>
+  <a href="http://localhost:8000/admin">Log In</a>
+{% endif %}
+{% endblock %}
