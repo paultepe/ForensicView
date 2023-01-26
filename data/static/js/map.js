@@ -5,9 +5,8 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 }).addTo(map);
 const markers = JSON.parse(document.getElementById("markers-data").textContent);
-let feature = L.geoJSON(markers)
-    .bindPopup(function (layer) {
-        return layer.feature.properties.date_time;
-    })
-    .addTo(map);
+let feature = L.geoJSON(markers, {
+  onEachFeature: function (point, layer) {
+    layer.bindPopup('<p>'+point.properties.date_time+'</p><p>type: '+point.properties.type+'</p><p>database: '+point.properties.database+'</p>');
+  }}).addTo(map);
 map.fitBounds(feature.getBounds(), { padding: [100, 100] });
