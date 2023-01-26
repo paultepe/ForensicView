@@ -8,7 +8,7 @@ from django.contrib.auth import authenticate, login
 def registerpage(request):
     form = CreateUserForm()
     if request.user.is_authenticated:
-        return redirect('home')
+        return HttpResponseRedirect('http://127.0.0.1:8000')
     else:
         if request.method == 'POST':
             form = CreateUserForm(request.POST)
