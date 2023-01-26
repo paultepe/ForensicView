@@ -1,5 +1,6 @@
 from django.contrib.gis.db.models import PointField
 from django.db import models
+from django.contrib.gis.geos.geometry import GEOSGeometry
 
 
 # Create your models here.
@@ -32,6 +33,10 @@ class Database(models.Model):
 
 class Geodata(models.Model):
     location = PointField()
-    date_time = models.DateTimeField()
+    date_time = models.DateTimeField(blank=True, null=True)
+    type = models.CharField(max_length=30, blank=True, null=True )
     database = models.ForeignKey(to=Database, on_delete=models.CASCADE, blank=True, null=True)
+
+    def __str__(self):
+        return str(self.location.coords)
 
