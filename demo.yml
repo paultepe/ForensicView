@@ -14,6 +14,7 @@ services:
     command: >
       /bin/bash -c "python manage.py makemigrations  --noinput
       && python manage.py migrate  --noinput
+      && python manage.py shell  < extract_geodata.py
       && python manage.py runserver 0.0.0.0:8000"
 
 
