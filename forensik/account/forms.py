@@ -4,24 +4,7 @@ from django import forms
 from django.core.exceptions import ValidationError
 
 
-class LoginForm(AuthenticationForm):
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['username'].widget.attrs.update(
-            {'class': 'form-control',
-             'placeholder': 'Benutzername'
-             }
-        )
-        self.fields['password'].widget.attrs.update(
-            {'class': 'form-control',
-             'placeholder': 'Passwort'}
-        )
-
-
 class CreateUserForm(UserCreationForm):
-    first_name = forms.CharField(max_length=30)
-    last_name = forms.CharField(max_length=30)
     email = forms.EmailField(max_length=254)
 
     error_messages = {
@@ -34,10 +17,10 @@ class CreateUserForm(UserCreationForm):
         fields = ['username', 'first_name', 'last_name', 'email', 'password1', 'password2','is_superuser','is_staff']
         labels = {
             "is_superuser": "Forensiker",
-            "is_staff": "Bitte ankreuzen"
+            "is_staff": "Bitte ankreuzen",
+            "first_name": "Vorname",
+            "last_name": "Nachname",
         }
-
-
 
     def __init__(self, *args, **kwargs):
         super(CreateUserForm, self).__init__(*args, **kwargs)
