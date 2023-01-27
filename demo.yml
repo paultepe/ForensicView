@@ -4,7 +4,7 @@ services:
   django:
     build:
       context: .
-      dockerfile: ./compose/dockerfile
+      dockerfile: compose/dockerfile
     image: forensik_projekt_local_django
     container_name: forensik_projekt_local_django
     volumes:
@@ -15,6 +15,13 @@ services:
       /bin/bash -c "python manage.py makemigrations  --noinput
       && python manage.py migrate  --noinput
       && python manage.py shell  < extract_geodata.py
+      && echo '############################################'
+      && echo '#          USE THIS LINK PLEASE            #'
+      && echo '#                    ||                    #'
+      && echo '#                    V                     #'
+      && echo '#          http://localhost:8000           #'
+      && echo '#                    ^                     #'
+      && echo '#                    ||                    #'
+      && echo '#          USE THIS LINK PLEASE            #'
+      && echo '############################################'
       && python manage.py runserver 0.0.0.0:8000"
-
-
