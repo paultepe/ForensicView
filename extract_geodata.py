@@ -1,9 +1,10 @@
 import os
-import random
 from pathlib import Path
 from exif import Image
 from forensik.case.models import Geodata
 from django.contrib.gis.geos import Point
+from django.core.files.temp import NamedTemporaryFile
+from django.core.files.base import ContentFile, File
 
 
 def get_image_paths(directory):
@@ -39,11 +40,12 @@ def image_coordinates(image_path):
 
 
 
-filepaths = get_image_paths("./data/static/to_analyze")
+filepaths = get_image_paths("./user_data")
 for file in filepaths:
     coords = image_coordinates(file)
-    print(file)
-    if coords:
-        point = Point(coords)
-        obj = Geodata(location=point, type="image")
-        obj.save()
+    with open(file, 'rb') as f:
+        if coords:
+            point = Point(coords)
+            obj = Geodata.objects.create(location=point, type="image", image=(File(f)))
+
+

@@ -1,6 +1,5 @@
 from django.contrib.gis.db.models import PointField
 from django.db import models
-from django.contrib.gis.geos.geometry import GEOSGeometry
 
 
 # Create your models here.
@@ -36,7 +35,11 @@ class Geodata(models.Model):
     date_time = models.DateTimeField(blank=True, null=True)
     type = models.CharField(max_length=30, blank=True, null=True )
     database = models.ForeignKey(to=Database, on_delete=models.CASCADE, blank=True, null=True)
-
+    image = models.ImageField(upload_to='images', blank=True, null=True)
     def __str__(self):
         return str(self.location.coords)
+
+    @property
+    def popupContent(self):
+      return self.image.url
 

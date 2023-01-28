@@ -26,5 +26,9 @@ class MarkersMapView(TemplateView):
     def get_context_data(self, **kwargs):
         """Return the view context data."""
         context = super().get_context_data(**kwargs)
-        context["geodata"] = json.loads(serialize("geojson", Geodata.objects.all()))
+        objects = Geodata.objects.all()
+        for object in objects:
+            print(object.image)
+            object.image = object.popupContent
+        context["geodata"] = json.loads(serialize("geojson", objects))
         return context

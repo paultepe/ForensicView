@@ -7,9 +7,10 @@ from django.contrib.gis import admin
 @admin.register(Geodata)
 class MarkerAdmin(admin.OSMGeoAdmin):
     """Marker admin."""
-    list_display = ("database", "date_time" , "location")
+    list_display = ("database", "date_time" , "location", "image")
 
 admin.site.register(Case)
 admin.site.register(Database)
 admin.site.register(Device)
 admin.site.register(Person)
+
