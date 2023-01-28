@@ -42,6 +42,7 @@ def image_coordinates(image_path):
 
 filepaths = get_image_paths("./user_data")
 for file in filepaths:
+    print("===========WORKING=============")
     coords = image_coordinates(file)
     with open(file, 'rb') as f:
         if coords:
