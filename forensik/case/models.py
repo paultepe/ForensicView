@@ -2,6 +2,8 @@ from django.contrib.gis.db.models import PointField
 from django.db import models
 
 
+STATUS = ((1, 'Nicht analysiert'),(2, 'Analysiert'))
+
 # Create your models here.
 class Case(models.Model):
     name = models.CharField(max_length=20)
@@ -14,6 +16,9 @@ class Device(models.Model):
     brand = models.CharField(max_length=30)
     model = models.CharField(max_length=30)
     type = models.CharField(max_length=30)
+
+    def __str__(self):
+        return self.model
 
 
 class Person(models.Model):
@@ -29,6 +34,12 @@ class Person(models.Model):
 class Database(models.Model):
     database = models.CharField(max_length=30)
     device = models.ForeignKey(to=Device, on_delete=models.CASCADE)
+    file = models.FileField(upload_to='databases',blank=True, null=True )
+    status = models.IntegerField(choices=STATUS, default=1)
+
+
+    def __str__(self):
+        return self.database
 
 class Geodata(models.Model):
     location = PointField()
