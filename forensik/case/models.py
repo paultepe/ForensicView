@@ -4,6 +4,7 @@ from django.db import models
 
 
 STATUS = ((1, 'Nicht analysiert'),(2, 'Analysiert'))
+ANNOTATION = ((1, 'Ja'),(2, 'Nein'))
 
 # Create your models here.
 class Case(models.Model):
@@ -47,7 +48,7 @@ class Database(models.Model):
 
 class Image(models.Model):
     image = models.FileField(upload_to='images',blank=True, null=True )
-    device = models.ForeignKey(to=Device, on_delete=models.CASCADE)
+    device = models.ForeignKey(to=Device, on_delete=models.CASCADE,blank=True, null=True )
     status = models.IntegerField(choices=STATUS, default=1)
 
     def __str__(self):
@@ -62,6 +63,7 @@ class Geodata(models.Model):
     image = models.ForeignKey(to=Image, on_delete=models.CASCADE, blank=True, null=True)
     img_url = models.CharField(max_length=100,blank=True, null=True)
     device_name = models.CharField(max_length=50, blank=True, null=True)
+    annotation = models.IntegerField(choices=ANNOTATION, default=1)
     def __str__(self):
         return str(self.location.coords)
 

@@ -4,10 +4,15 @@ from django.contrib.gis import admin
 
 
 
+
+
 @admin.register(Geodata)
 class MarkerAdmin(admin.OSMGeoAdmin):
     """Marker admin."""
+    fields = ('location','device_name','date_time','type','database','image')
+    readonly_fields = ('database','device_name')
     list_display = ("database", "date_time" , "location")
+
 
 @admin.register(Device)
 class DeviceAdmin(admin.ModelAdmin):

@@ -7,7 +7,8 @@ from . import views
 app_name = "case"
 
 urlpatterns = [
-    path("", views.MarkersMapView.as_view(), name='map')
+    path("", views.MapView.as_view(), name='map'),
+    path("analyse", views.analyze_data, name='analyze')
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,
