@@ -23,12 +23,17 @@ var osmBase = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
 
 var setPopup = function(feature,layer) {
             if(feature.properties.img_url === null){
-                layer.bindPopup('<p>'+feature.properties.type+': '+feature.properties.type+'</p>');
+                layer.bindPopup('<p><b>Gerät:</b> '+feature.properties.device_name+'</p>' +
+                                '<p><b>Datenbank:</b> '+feature.properties.type+'</p>' +
+                                '<p><b>Uhrzeit:</b> '+feature.properties.date_time+'</p>' +
+                                '<p><b>Koordinaten:</b> '+feature.geometry.coordinates+'</p>');
             }
             else{
-                layer.bindPopup('<p>'+feature.properties.date_time+'</p>' +
-                    '<p>type: '+feature.properties.type+'</p>' +
-                    "<img src='" + feature.properties.img_url+ "'" + " class=popupImage " + "/>");
+                layer.bindPopup('<p><b>Gerät:</b> '+feature.properties.device_name+'</p>' +
+                                '<p><b>Quelle:</b> '+feature.properties.img_url+'</p>' +
+                                '<p><b>Uhrzeit:</b> '+feature.properties.date_time+'</p>' +
+                                '<p><b>Koordinaten:</b> '+feature.geometry.coordinates+'</p>' +
+                                 '<a href=\''+feature.properties.img_url+'\'><img src=\''+ feature.properties.img_url+'\'style=\'width:100%;height:100%;\'></a>',{maxWidth:200});
             }
 
 
