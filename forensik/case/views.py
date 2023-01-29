@@ -15,7 +15,7 @@ from django.shortcuts import render
 from django.template import loader
 from django.views.generic.base import TemplateView
 
-from .models import Geodata,Person,Case, Database
+from .models import Geodata,Person,Case, Database,Image
 
 def Frontpage(request):
     objects = Case.objects.all()
@@ -43,9 +43,20 @@ class MarkersMapView(TemplateView):
                 location = Point(row.loc['longitude'], row.loc['latitude'])
                 Geodata.objects.create(location=location, type=database.file, database=database )
             Database.objects.filter(pk=database.id).update(status=2)
-        objects = Geodata.objects.all()
+        objects = Geodata.objects.select_related('image')
         for object in objects:
-            if object.image:
-                object.image = object.popupContent
+            if object.image_id and not object.img_url:
+                object.img_url = object.get_image_url
+                object.save()
+        """
+        context["data"] = {"cases": []}
+        case = {
+            "name":case_name,
+            "geodata": json.loads(serialize("geojson", objects))
+        }
+        context["data"]["cases"].append(case)
+        print(type(context["data"]))
+       """
+
         context["geodata"] = json.loads(serialize("geojson", objects))
         return context

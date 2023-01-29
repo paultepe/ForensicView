@@ -37,20 +37,29 @@ class Database(models.Model):
     file = models.FileField(upload_to='databases',blank=True, null=True )
     status = models.IntegerField(choices=STATUS, default=1)
 
-
     def __str__(self):
         return self.database
+
+class Image(models.Model):
+    image = models.FileField(upload_to='images',blank=True, null=True )
+    device = models.ForeignKey(to=Device, on_delete=models.CASCADE)
+    status = models.IntegerField(choices=STATUS, default=1)
+
+    def __str__(self):
+        return self.image.name
+
 
 class Geodata(models.Model):
     location = PointField()
     date_time = models.DateTimeField(blank=True, null=True)
     type = models.CharField(max_length=30, blank=True, null=True )
     database = models.ForeignKey(to=Database, on_delete=models.CASCADE, blank=True, null=True)
-    image = models.ImageField(upload_to='images', blank=True, null=True)
+    image = models.ForeignKey(to=Image, on_delete=models.CASCADE, blank=True, null=True)
+    img_url = models.CharField(max_length=100,blank=True, null=True)
     def __str__(self):
         return str(self.location.coords)
-
     @property
-    def popupContent(self):
-      return self.image.url
-
+    def get_image_url(self):
+      img = Image.objects.get(id=self.image.pk)
+      img_url = img.image.url
+      return img_url
