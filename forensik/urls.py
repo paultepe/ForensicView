@@ -16,6 +16,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+
+admin.site.site_header = 'GeoVisualizer'                    # default: "Django Administration"
+admin.site.index_title = 'GeoVisualizer'                 # default: "Site administration"
+admin.site.site_title = 'GeoVisualizer' # default: "Django site admin"
+
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("accounts/", include('forensik.account.urls', namespace='account')),
