@@ -1,4 +1,4 @@
-<!DOCTYPE html>{% extends 'pages/base_site.html' %}
+{% extends 'pages/base_site.html' %}
 {% load static %}
 {% block content %}
 <!doctype html>
@@ -11,20 +11,56 @@
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 </head>
 <body>
+
 <div id="map">
-    <script>
-    var map = L.map('map').setView([53.2464, 10.4115], 13);
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-}).addTo(map);
-    </script>
-        {{ geodata|json_script:"markers-data" }}
-        <script>
-            const markers = JSON.parse(document.getElementById("markers-data").textContent);
-            window.alert(markers)
-        </script>
-    </div>
+    {{ geodata|json_script:"markers-data" }}
+<script>
+const markers = JSON.parse(document.getElementById("markers-data").textContent);
+var map = L.map("map").setView([38.5,-8.8], 5);
+var osmBase = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+  attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>'
+});
+
+var setPopup = function(feature,layer) {
+            if(feature.properties.img_url === null){
+                layer.bindPopup('<p>'+feature.properties.type+': '+feature.properties.type+'</p>');
+            }
+            else{
+                layer.bindPopup('<p>'+feature.properties.date_time+'</p>' +
+                    '<p>type: '+feature.properties.type+'</p>' +
+                    "<img src='" + feature.properties.img_url+ "'" + " class=popupImage " + "/>");
+            }
+
+
+}
+var baseLayers = {
+    "OSM": osmBase
+}
+
+
+var lc = L.control.layers(baseLayers);
+osmBase.addTo(map)
+lc.addTo(map);
+
+let device =""
+{% for device in devices %}
+    device = L.geoJson(markers, {
+    filter: function(feature, layer) {
+      return (feature.properties.device_name === "{{device.device_name}}");
+    },
+     pointToLayer: function(feature,latlng) {
+      return new L.CircleMarker(latlng, {fillColor:'{{ device.color }}', fillOpacity: 1,
+          color: 'black'})
+    },
+    onEachFeature: setPopup
+  },
+);
+   device.addTo(map);
+   lc.addOverlay(device, "{{device.device_name}}");
+{% endfor %}
+map.fitBounds(device.getBounds(), { padding: [100, 100] });
+</script>
+</div>
 </body>
 </html>
 {% endblock content %}

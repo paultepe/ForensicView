@@ -3,3 +3,4 @@ exif
 pathlib
 Pillow
 pandas
+django-colorfield

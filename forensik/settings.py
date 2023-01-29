@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.gis",
     "forensik.account.apps.AccountConfig",
-    "forensik.case.apps.CaseConfig"
+    "forensik.case.apps.CaseConfig",
+    "colorfield"
 ]
 
 MIDDLEWARE = [
@@ -131,6 +132,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "data/static")
 
