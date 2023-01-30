@@ -1,0 +1,6 @@
+corpus;key:string;timestamp;merge_key;feature_fprint;latitude;longitude;is_local;sync_item;
+8;0:0;1662718641453;0;;53.18229;10.37437;0;0:02%Saarstraße 4A, 21406 Melbeck%0x190128788
+8;1:0;1662718641432;0;;53.22831;10.40492;0;1:04#Universitätsallee 1, 21335 Lüneburg%0x13278023ß18
+8;2:0;1662719112978;0;;53.24902;10.42272;0;8:01%Pulverweg 6, 21337 Lüneburg%ox192831292017
+8;3:0;1662719277543;0;;53.17816;10.41354;0;0:63%Uelzener Str. 27, 21406 Melbeck%0xo132ewiasdasd10
+8;4:0;1662719299329;0;;53.17952;10.40919;0;0:84%Uelzener Str. 10A, 21406 Melbeck%0x12780191239
