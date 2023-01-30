@@ -39,7 +39,7 @@ def get_device_folder(request):
 class MapView(TemplateView):
     """Markers map view."""
 
-    template_name = "case/map.html"
+    template_name = "case/test_page.html"
 
     def get_context_data(self, **kwargs):
 
