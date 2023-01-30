@@ -1,5 +1,7 @@
 
 import os
+from datetime import datetime
+
 from django.core.files.base import File
 import pandas as pd
 from pathlib import Path
@@ -20,15 +22,16 @@ def get_image_paths(directory):
 
 def read_csv():
     """Return the view context data."""
-    databases = Database.objects.all().filter(status=1)
+    databases = Database.objects.all()
     for database in databases:
-        df = pd.read_csv('.' + database.file.url, sep=';')
+        df = pd.read_csv('.' + database.file.url, sep=';',encoding = "ISO-8859-1",error_bad_lines=False)
         for index, row in df.iterrows():
             if type(row.loc['longitude']) == int and type(row.loc['latitude']) == int:
                 row.loc['longitude'] /= 10 ** (len(str(row.loc['longitude'])) - 2)
                 row.loc['latitude'] /= 10 ** (len(str(row.loc['latitude'])) - 2)
             location = Point(row.loc['longitude'], row.loc['latitude'])
-            Geodata.objects.create(location=location, type=database.file, database=database, annotation=2)
+            date = timestamp_to_data(row.loc['timestamp'])
+            Geodata.objects.create(location=location, type=database.file, database=database,date_time=date, annotation=2)
         Database.objects.filter(pk=database.id).update(status=2)
 
 
@@ -59,6 +62,12 @@ def format_date(date_str):
     hour, minute, second = time.split(":")
     return f"{year}-{month}-{day} {hour}:{minute}:{second}"
 
+def timestamp_to_data(timestamp):
+    if len(str(timestamp)) == 13:
+        timestamp /= 1000
+    print(timestamp)
+    dt_object = datetime.fromtimestamp(timestamp)
+    return dt_object
 
 def read_images():
     images = Image.objects.all().filter(status=1)

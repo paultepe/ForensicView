@@ -11,9 +11,9 @@ admin.site.site_title = 'ForensicView Case Manager'
 
 
 
-admin.site.site_header = 'GeoVisualizer'                    # default: "Django Administration"
-admin.site.index_title = 'GeoVisualizer'                 # default: "Site administration"
-admin.site.site_title = 'GeoVisualizer' # default: "Django site admin"
+admin.site.site_header = 'ForensicVisualizer'
+admin.site.index_title = 'Case Manager'
+admin.site.site_title = 'ForensicVisualizer'
 
 urlpatterns = [
     path("admin/", admin.site.urls),
