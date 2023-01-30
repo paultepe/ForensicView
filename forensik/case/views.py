@@ -1,14 +1,12 @@
-"""Map"""
+"""Preprocess data for displaying in map / call analyze data"""
 import json
 from django.shortcuts import render
 from django.core.serializers import serialize
-from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
 from django.views.generic.base import TemplateView
 from .analyze import read_images, read_csv, read_local_images
 from .forms import ImageForm
 from .models import Device, Geodata, Case, Person, Annotation
-from django.core.cache import cache
 
 
 

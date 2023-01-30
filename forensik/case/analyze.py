@@ -1,10 +1,10 @@
-
+"""methods to import data"""
 import os
 from datetime import datetime
 from django.core.files.base import File
 import pandas as pd
 from pathlib import Path
-from .models import Geodata, Database, Device,Image
+from .models import Database, Device,Image
 from exif import Image as ExifImage
 from forensik.case.models import Geodata
 from django.contrib.gis.geos import Point

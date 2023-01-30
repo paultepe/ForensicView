@@ -1,3 +1,4 @@
+"""database design"""
 from django.contrib.gis.db.models import PointField
 from colorfield.fields import ColorField
 from django.db import models
