@@ -24,10 +24,17 @@
 
     var setPopup = function(feature,layer) {
         if (feature.properties.img_url === null) {
-            layer.bindPopup('<p><b>Gerät:</b> ' + feature.properties.device_name + '</p>' +
+            if (feature.properties.case_name === null) {
+                layer.bindPopup('<p><b>Gerät:</b> ' + feature.properties.device_name + '</p>' +
                 '<p><b>Datenbank:</b> ' + feature.properties.type + '</p>' +
                 '<p><b>Uhrzeit:</b> ' + feature.properties.date_time + '</p>' +
                 '<p><b>Koordinaten:</b> ' + feature.geometry.coordinates + '</p>');
+            } else {
+                layer.bindPopup('<p><b>Typ:</b> ' + feature.properties.type + '</p>' +
+                '<p><b>Fall:</b> ' + feature.properties.case_name + '</p>' +
+                '<p><b>Uhrzeit:</b> ' + feature.properties.date_time + '</p>' +
+                '<p><b>Koordinaten:</b> ' + feature.geometry.coordinates + '</p>');
+            }
         } else {
             layer.bindPopup('<p><b>Gerät:</b> ' + feature.properties.device_name + '</p>' +
                 '<p><b>Quelle:</b> ' + feature.properties.img_url + '</p>' +
@@ -50,15 +57,16 @@
     let _case = "";
     let person = "";
     let device = "";
+    let annotation = "";
     let tabstop = "&nbsp&nbsp&nbsp&nbsp";
 
 
     {% for case in cases %}
         _case = L.featureGroup();
-        layerControl.addOverlay(_case, "<b>{{ case.name }}<b>");
+        layerControl.addOverlay(_case, "<b>{{ case.name }}</b>");
         {% for person in case.persons %}
             person = L.featureGroup();
-            layerControl.addOverlay(person, "<b>" + tabstop + "{{ person.name }}<b>");
+            layerControl.addOverlay(person, "<b>" + tabstop + "{{ person.name }}</b>");
             {% for device in person.devices %}
                 device = L.geoJson(markers, {
                     filter: function(feature, layer) {
@@ -70,10 +78,23 @@
                     onEachFeature: setPopup
                 });
                 layerControl.addOverlay(device, "<b>" + tabstop + tabstop + "{{device.device_name}}</b>");
-                person.addLayer(device)
+                person.addLayer(device);
                 map.removeLayer(device);
             {% endfor %}
-            _case.addLayer(person)
+            _case.addLayer(person);
+        {% endfor %}
+        {% for annotation in case.annotations %}
+            annotation = L.geoJson(markers, {
+                    filter: function(feature, layer) {
+                        return (feature.properties.case_name === "{{ annotation.case_name }}");
+                    },
+                    pointToLayer: function(feature,latlng) {
+                        return new L.CircleMarker(latlng, {fillOpacity: 1, color: 'black'})
+                    },
+                    onEachFeature: setPopup
+            });
+            layerControl.addOverlay(annotation, "<b>" + tabstop + "Anmerkungen</b>");
+            _case.addLayer(annotation);
         {% endfor %}
         layerGroup.addLayer(_case)
     {% endfor %}

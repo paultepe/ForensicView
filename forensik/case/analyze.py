@@ -31,7 +31,7 @@ def read_csv():
                 row.loc['latitude'] /= 10 ** (len(str(row.loc['latitude'])) - 2)
             location = Point(row.loc['longitude'], row.loc['latitude'])
             date = timestamp_to_data(row.loc['timestamp'])
-            Geodata.objects.create(location=location, type=database.file, database=database,date_time=date, annotation=2)
+            Geodata.objects.create(location=location, type=database.file, database=database,date_time=date)
         Database.objects.filter(pk=database.id).update(status=2)
 
 

@@ -77,6 +77,7 @@ class Geodata(models.Model):
     img_url = models.CharField(max_length=100,blank=True, null=True)
     device_name = models.CharField(max_length=50, blank=True, null=True)
     annotation = models.ForeignKey(to=Annotation, on_delete=models.CASCADE, blank=True, null=True)
+    case_name = models.CharField(max_length=50, blank=True, null=True)
     def __str__(self):
         return str(self.location.coords)
 
@@ -90,3 +91,9 @@ class Geodata(models.Model):
     def get_device_name(self):
       device = Device.objects.get(database=self.database)
       return device.device_name
+
+    @property
+    def get_case(self):
+        case = Case.objects.get(annotation__geodata=self)
+        return case.name
+

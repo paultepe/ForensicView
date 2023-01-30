@@ -7,7 +7,7 @@ from django.shortcuts import redirect
 from django.views.generic.base import TemplateView
 from .analyze import read_images, read_csv, read_local_images
 from .forms import ImageForm
-from .models import Device, Geodata, Case, Person
+from .models import Device, Geodata, Case, Person, Annotation
 from django.core.cache import cache
 
 
@@ -49,15 +49,19 @@ class MapView(TemplateView):
         for object in objects:
             if object.image_id and not object.img_url:
                 object.img_url = object.get_image_url
-            if object.annotation == 2 and not object.image:
+                object.save()
+            if not object.annotation:
                 object.device_name = object.get_device_name
+                object.save()
+            if object.annotation:
+                object.case_name = object.get_case
                 object.save()
         context["cases"] = []
 
 
         for case in cases:
             case_name = case.name
-            case_dict = {"name": case_name, "persons":  []}
+            case_dict = {"name": case_name, "persons":  [], "annotations": []}
             case_persons = Person.objects.filter(case=case)
             for person in case_persons:
                 person_firstname = person.firstname
@@ -69,8 +73,13 @@ class MapView(TemplateView):
                     person_dict["devices"].append(device_dict)
 
                 case_dict["persons"].append(person_dict)
+            case_annotations = Annotation.objects.filter(case=case)
+            for annotation in case_annotations:
+                annotation_dict = {"description": annotation.description, "case_name": annotation.case.name}
+                case_dict["annotations"].append(annotation_dict)
 
             context["cases"].append(case_dict)
         context["geodata"] = json.loads(serialize("geojson", objects))
         context["title"] = "ForensicView-Kartenansicht"
+        print(context["geodata"])
         return context
