@@ -81,5 +81,4 @@ class MapView(TemplateView):
             context["cases"].append(case_dict)
         context["geodata"] = json.loads(serialize("geojson", objects))
         context["title"] = "ForensicView-Kartenansicht"
-        print(context["geodata"])
         return context
