@@ -47,12 +47,46 @@
     layerControl.addTo(map);
 
     let layerGroup = L.featureGroup();
-    let device =""
+    let _case = "";
+    let person = "";
+    let device = "";
+    let tabstop = "&nbsp&nbsp&nbsp&nbsp";
 
-    layerControl.addOverlay(layerGroup,"Test")
+
+    {% for case in cases %}
+        _case = L.featureGroup();
+        layerControl.addOverlay(_case, "<b>{{ case.name }}<b>");
+        {% for person in case.persons %}
+            person = L.featureGroup();
+            layerControl.addOverlay(person, "<b>" + tabstop + "{{ person.name }}<b>");
+            {% for device in person.devices %}
+                device = L.geoJson(markers, {
+                    filter: function(feature, layer) {
+                        return (feature.properties.device_name === "{{device.device_name}}");
+                        },
+                    pointToLayer: function(feature,latlng) {
+                        return new L.CircleMarker(latlng, {fillColor:'{{ device.color }}', fillOpacity: 1, color: 'black'})
+                    },
+                    onEachFeature: setPopup
+                });
+                layerControl.addOverlay(device, "<b>" + tabstop + tabstop + "{{device.device_name}}</b>");
+                person.addLayer(device)
+                map.removeLayer(device);
+            {% endfor %}
+            _case.addLayer(person)
+        {% endfor %}
+        layerGroup.addLayer(_case)
+    {% endfor %}
 
 
 
+    //
+    //let device =""
+
+    //layerControl.addOverlay(layerGroup,"Test")
+
+
+    /*
     {% for device in devices %}
         device = L.geoJson(markers, {
             filter: function(feature, layer) {
@@ -67,7 +101,7 @@
        layerControl.addOverlay(device, "<b>{{device.device_name}}</b>");
        map.removeLayer(device);
     {% endfor %}
-
+    */
     map.fitBounds(layerGroup.getBounds(), { padding: [100, 100] });
 
     </script>

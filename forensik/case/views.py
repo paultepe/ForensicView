@@ -39,7 +39,7 @@ def get_device_folder(request):
 class MapView(TemplateView):
     """Markers map view."""
 
-    template_name = "case/test_page.html"
+    template_name = "case/map.html"
 
     def get_context_data(self, **kwargs):
 
@@ -53,7 +53,6 @@ class MapView(TemplateView):
                 object.device_name = object.get_device_name
                 object.save()
         context["cases"] = []
-        context["devices"] = []
 
 
         for case in cases:
@@ -72,42 +71,6 @@ class MapView(TemplateView):
                 case_dict["persons"].append(person_dict)
 
             context["cases"].append(case_dict)
-
-
-
-        """
-        device_names = Device.objects.values('device_name', 'color').distinct()
-        for device in device_names:
-            context["devices"].append({"device_name": device["device_name"],
-                                       "color": device['color']})
         context["geodata"] = json.loads(serialize("geojson", objects))
         context["title"] = "ForensicView-Kartenansicht"
         return context
-        """
-
-"""
-
-
-context["cases"] = [
-    {"name":"",
-     "persons":
-         [
-             {
-                 "name":"",
-                 "devices":
-              [
-                  {
-                      "device_name":"",
-                      "color":""
-                  }
-              ]
-          }
-     ],
-     "annotations":""
-     }]
-
-1 For-loop -> case
-    2. Pers
-        3 device
-
-"""
