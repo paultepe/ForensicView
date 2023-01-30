@@ -7,7 +7,7 @@ from django.shortcuts import redirect
 from django.views.generic.base import TemplateView
 from .analyze import read_images, read_csv, read_local_images
 from .forms import ImageForm
-from .models import Device, Geodata
+from .models import Device, Geodata, Case, Person
 from django.core.cache import cache
 
 
@@ -45,13 +45,37 @@ class MapView(TemplateView):
 
         context = super().get_context_data(**kwargs)
         objects = Geodata.objects.all()
+        cases = Case.objects.all()
         for object in objects:
             if object.image_id and not object.img_url:
                 object.img_url = object.get_image_url
             if object.annotation == 2 and not object.image:
                 object.device_name = object.get_device_name
                 object.save()
+        context["cases"] = []
         context["devices"] = []
+
+
+        for case in cases:
+            case_name = case.name
+            case_dict = {"name": case_name, "persons":  []}
+            case_persons = Person.objects.filter(case=case)
+            for person in case_persons:
+                person_firstname = person.firstname
+                person_lastname = person.lastname
+                person_dict = {"name": person_firstname + person_lastname, "devices": []}
+                person_devices = Device.objects.filter(person=person)
+                for device in person_devices:
+                    device_dict = {"device_name": device.device_name, "color": device.color}
+                    person_dict["devices"].append(device_dict)
+
+                case_dict["persons"].append(person_dict)
+
+            context["cases"].append(case_dict)
+
+
+
+        """
         device_names = Device.objects.values('device_name', 'color').distinct()
         for device in device_names:
             context["devices"].append({"device_name": device["device_name"],
@@ -59,7 +83,7 @@ class MapView(TemplateView):
         context["geodata"] = json.loads(serialize("geojson", objects))
         context["title"] = "ForensicView-Kartenansicht"
         return context
-
+        """
 
 """
 
