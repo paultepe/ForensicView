@@ -1,15 +1,18 @@
 from django.contrib import admin
-from .models import Case, Person, Geodata, Database, Device, Image
+from .models import Case, Person, Geodata, Database, Device, Image, Annotation
 from django.contrib.gis import admin
 
 
 @admin.register(Geodata)
-class MarkerAdmin(admin.OSMGeoAdmin):
-    'Marker admin.'
-    fields = ('location', 'device_name', 'date_time', 'type', 'database', 'image')
+class GeoDataAdmin(admin.OSMGeoAdmin):
+    fields = ('location', 'device_name', 'date_time', 'type', 'database', 'image', 'annotation')
     readonly_fields = ('database', 'device_name')
     list_display = ('database', 'date_time', 'location')
 
+@admin.register(Annotation)
+class AnnotationAdmin(admin.ModelAdmin):
+    fields = ('description', 'case')
+    list_display = ('description', 'case')
 
 @admin.register(Device)
 class DeviceAdmin(admin.ModelAdmin):

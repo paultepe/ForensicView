@@ -4,7 +4,6 @@ from django.db import models
 from django.utils.safestring import mark_safe
 
 STATUS = ((1, 'Nicht analysiert'),(2, 'Analysiert'))
-ANNOTATION = ((1, 'Ja'),(2, 'Nein'))
 
 # Create your models here.
 class Case(models.Model):
@@ -14,7 +13,12 @@ class Case(models.Model):
     def __str__(self):
         return self.name
 
+class Annotation(models.Model):
+    case = models.ForeignKey(to=Case, on_delete=models.CASCADE)
+    description = models.CharField(max_length=50)
 
+    def __str__(self):
+        return self.description
 
 class Person(models.Model):
     firstname = models.CharField(max_length=30)
@@ -48,10 +52,10 @@ class Database(models.Model):
 
     def __str__(self):
         return self.database
-
+2
 class Image(models.Model):
     image = models.FileField(upload_to='images',blank=True, null=True )
-    device = models.ForeignKey(to=Device, on_delete=models.CASCADE)
+    device = models.ForeignKey(to=Device, on_delete=models.CASCADE,blank=True, null=True)
     status = models.IntegerField(choices=STATUS, default=1)
 
     def __str__(self):
@@ -72,7 +76,7 @@ class Geodata(models.Model):
     image = models.ForeignKey(to=Image, on_delete=models.CASCADE, blank=True, null=True)
     img_url = models.CharField(max_length=100,blank=True, null=True)
     device_name = models.CharField(max_length=50, blank=True, null=True)
-    annotation = models.IntegerField(choices=ANNOTATION, default=1)
+    annotation = models.ForeignKey(to=Annotation, on_delete=models.CASCADE, blank=True, null=True)
     def __str__(self):
         return str(self.location.coords)
 
