@@ -77,31 +77,6 @@
         {% endfor %}
         layerGroup.addLayer(_case)
     {% endfor %}
-
-
-
-    //
-    //let device =""
-
-    //layerControl.addOverlay(layerGroup,"Test")
-
-
-    /*
-    {% for device in devices %}
-        device = L.geoJson(markers, {
-            filter: function(feature, layer) {
-              return (feature.properties.device_name === "{{device.device_name}}");
-            },
-            pointToLayer: function(feature,latlng) {
-                return new L.CircleMarker(latlng, {fillColor:'{{ device.color }}', fillOpacity: 1, color: 'black'})
-            },
-        onEachFeature: setPopup
-        });
-       layerGroup.addLayer(device)
-       layerControl.addOverlay(device, "<b>{{device.device_name}}</b>");
-       map.removeLayer(device);
-    {% endfor %}
-    */
     map.fitBounds(layerGroup.getBounds(), { padding: [100, 100] });
 
     </script>
