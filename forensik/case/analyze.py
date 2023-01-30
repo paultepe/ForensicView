@@ -53,8 +53,9 @@ def image_coordinates(image_path):
                                      img.gps_latitude_ref))
 
         except AttributeError:
-            return
-        return coords,date
+            return AttributeError
+        if coords and date:
+            return coords, date
 
 def format_date(date_str):
     date, time = date_str.split(" ")
@@ -71,12 +72,16 @@ def timestamp_to_data(timestamp):
 def read_images():
     images = Image.objects.all().filter(status=1)
     for image in images:
-        coords,date = image_coordinates('.' + image.image.url)
-        point = Point(coords)
-        if (point and date):
-            Geodata.objects.create(location=point, type="image", image=image, device_name=image.device.device_name, date_time=date)
-        image.status = 2
-        image.save()
+        try:
+            coords, date = image_coordinates('.' + image.image.url)
+            point = Point(coords)
+            if (point and date):
+                Geodata.objects.create(location=point, type="image", image=image, date_time=date)
+            image.status = 2
+            image.save()
+        except:
+            pass
+
 
 
 def read_local_images(device,directory):
