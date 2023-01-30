@@ -1,7 +1,6 @@
 
 import os
 from datetime import datetime
-
 from django.core.files.base import File
 import pandas as pd
 from pathlib import Path
@@ -21,7 +20,6 @@ def get_image_paths(directory):
     return image_paths
 
 def read_csv():
-    """Return the view context data."""
     databases = Database.objects.all().filter(status=1)
     for database in databases:
         df = pd.read_csv('.' + database.file.url, sep=';',encoding = "ISO-8859-1",error_bad_lines=False)
@@ -90,11 +88,14 @@ def read_local_images(device,directory):
         return ("Bereits importiert")
     filepaths = get_image_paths("./user_data/images/"+directory)
     for file in filepaths:
-        coords,date = image_coordinates(file)
-        with open(file, 'rb') as f:
-            if coords and date:
-                point = Point(coords)
-                image_object = Image.objects.create(image=(File(f)),status=2,device=device_object)
-                Geodata.objects.create(location=point, type="image",date_time=date, image=image_object, annotation=2,device_name=device_object.device_name)
+        try:
+            coords,date = image_coordinates(file)
+            with open(file, 'rb') as f:
+                if coords and date:
+                    point = Point(coords)
+                    image_object = Image.objects.create(image=(File(f)),status=2,device=device_object)
+                    Geodata.objects.create(location=point, type="image",date_time=date, image=image_object, device_name=device_object.device_name)
+        except:
+            pass
     device_object.image_import = 2
     device_object.save()

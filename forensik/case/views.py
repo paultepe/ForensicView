@@ -50,12 +50,16 @@ class MapView(TemplateView):
             if object.image_id and not object.img_url:
                 object.img_url = object.get_image_url
                 object.save()
-            if not object.annotation:
-                object.device_name = object.get_device_name
-                object.save()
-            if object.annotation:
+            elif object.annotation:
                 object.case_name = object.get_case
                 object.save()
+            else:
+                try:
+                    object.device_name = object.get_device_name
+                    object.save()
+                except:
+                    pass
+
         context["cases"] = []
 
 
