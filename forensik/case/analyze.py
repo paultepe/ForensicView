@@ -22,7 +22,7 @@ def get_image_paths(directory):
 
 def read_csv():
     """Return the view context data."""
-    databases = Database.objects.all()
+    databases = Database.objects.all().filter(status=1)
     for database in databases:
         df = pd.read_csv('.' + database.file.url, sep=';',encoding = "ISO-8859-1",error_bad_lines=False)
         for index, row in df.iterrows():
@@ -81,7 +81,7 @@ def read_images():
 
 
 def read_local_images(device,directory):
-    device_object = Device.objects.get(id=device)
+    device_object = Device.objects.get(device_name=device)
     if device_object.image_import == 2:
         return ("Bereits importiert")
     filepaths = get_image_paths("./user_data/images/"+directory)

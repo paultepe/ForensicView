@@ -25,10 +25,10 @@ def get_device_folder(request):
         # create a form instance and populate it with data from the request:
         form = ImageForm(request.POST)
         if form.is_valid():
-            id = form.cleaned_data.get('Asservat')
+            device_name = form.cleaned_data.get('Asservat')
             directory = form.cleaned_data.get('Ordner')
             print(directory)
-            read_local_images(id,directory)
+            read_local_images(device_name,directory)
             form =ImageForm()
     # if a GET (or any other method) we'll create a blank form
     else:
