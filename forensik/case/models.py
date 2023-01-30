@@ -37,6 +37,9 @@ class Device(models.Model):
     def __str__(self):
         return self.device_name
 
+    def get_device(self):
+        return (self.id,self.device_name)
+
 class Database(models.Model):
     database = models.CharField(max_length=30)
     device = models.ForeignKey(to=Device, on_delete=models.CASCADE)

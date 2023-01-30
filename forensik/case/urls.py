@@ -8,7 +8,8 @@ app_name = "case"
 
 urlpatterns = [
     path("", views.MapView.as_view(), name='map'),
-    path("analyse", views.analyze_data, name='analyze')
+    path("analyse", views.analyze_data, name='analyze'),
+    path("test", views.get_name, name='get_name')
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,
