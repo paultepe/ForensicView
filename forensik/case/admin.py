@@ -1,4 +1,5 @@
 """Customizing Admin-Area"""
+from django.contrib import admin
 from .models import Case, Person, Geodata, Database, Device, Image, Annotation
 from django.contrib.gis import admin
 
