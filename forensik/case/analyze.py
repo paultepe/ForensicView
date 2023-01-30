@@ -65,7 +65,6 @@ def format_date(date_str):
 def timestamp_to_data(timestamp):
     if len(str(timestamp)) == 13:
         timestamp /= 1000
-    print(timestamp)
     dt_object = datetime.fromtimestamp(timestamp)
     return dt_object
 
@@ -85,7 +84,6 @@ def read_local_images(device,directory):
     if device_object.image_import == 2:
         return ("Bereits importiert")
     filepaths = get_image_paths("./user_data/images/"+directory)
-    print(filepaths)
     for file in filepaths:
         coords,date = image_coordinates(file)
         with open(file, 'rb') as f:
